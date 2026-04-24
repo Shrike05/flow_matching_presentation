@@ -39,7 +39,23 @@ class Presentation(Slide):
         R_m.shift(RIGHT*2)
         F.next_to(R_n, LEFT)
 
+        cat_word2 = Text("cat", font_size=64)
+        cat_word2.shift(LEFT * 2)
+
+
+        cats = [ImageMobject("assets/cat.jpg") for _ in range(0, 4)]
+        for i, kitten in enumerate(cats):
+            kitten.set_height(0.9)
+            kitten.shift(RIGHT * 2)
+            kitten.shift(UP*1.5)
+            kitten.shift(DOWN*i)
+
+        arrows = [Arrow(start=LEFT, end=kitten.get_left()) for kitten in cats]
+
         function_view = VGroup(F, R_n, R_m, arrow2).shift(DOWN)
+        fn_rn_group = VGroup(F, R_n)
+        multi_arrow_group = VGroup(*arrows)
+        cat_imgs_group = Group(*cats)
 
         #Show title and move it up
         self.play(Write(title))
@@ -71,14 +87,20 @@ class Presentation(Slide):
         self.next_slide()
         self.play(FadeOut(vec_view, lag_ratio=0.4))
         self.play(function_view.animate.shift(UP))
+        self.next_slide()
 
+        #wiggle R_n and R_m
+        self.play(Wiggle(R_n))
+        self.next_slide()
+        self.play(Wiggle(R_m))
+        self.next_slide()
 
+        #cat can have several different outputs
+        self.play(FadeTransform(R_m, cat_imgs_group), Transform(arrow2, multi_arrow_group), FadeTransform(fn_rn_group, cat_word2))
 
+        #move up this view then create the distribution view
 
-
-
-
-
+        #move the cats into points on this distribution view 
 
 
 # Generate Images from words
