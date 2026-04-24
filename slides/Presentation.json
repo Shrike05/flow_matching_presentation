@@ -123,8 +123,8 @@
       "src": null,
       "type": "video",
       "direction": "horizontal",
-      "file": "slides/files/Presentation/789527664e81f65bf5821c3ec6310aed8ddb3fcb469af2c291e2714e2f6df93e.mp4",
-      "rev_file": "slides/files/Presentation/789527664e81f65bf5821c3ec6310aed8ddb3fcb469af2c291e2714e2f6df93e_reversed.mp4"
+      "file": "slides/files/Presentation/7eea2255507e6c0a5915ee77faa38ca2eb9d4884f8b5047a97988c9fe0d3e2e9.mp4",
+      "rev_file": "slides/files/Presentation/7eea2255507e6c0a5915ee77faa38ca2eb9d4884f8b5047a97988c9fe0d3e2e9_reversed.mp4"
     },
     {
       "loop": false,
@@ -165,8 +165,50 @@
       "src": null,
       "type": "video",
       "direction": "horizontal",
-      "file": "slides/files/Presentation/c2a7513b96f2ce49d48da5c98228acfbaaafe4757d712e0b53cbafdfcd87fc9f.mp4",
-      "rev_file": "slides/files/Presentation/c2a7513b96f2ce49d48da5c98228acfbaaafe4757d712e0b53cbafdfcd87fc9f_reversed.mp4"
+      "file": "slides/files/Presentation/e870902c8fe8ec16fc2ddf37555ec681b6bf41575a8e73050e56eb0458cd9a49.mp4",
+      "rev_file": "slides/files/Presentation/e870902c8fe8ec16fc2ddf37555ec681b6bf41575a8e73050e56eb0458cd9a49_reversed.mp4"
+    },
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides/files/Presentation/13b5519972d59d056045f1af294ff3f7e88435c134b64169a89990a8a4d4c2e4.mp4",
+      "rev_file": "slides/files/Presentation/13b5519972d59d056045f1af294ff3f7e88435c134b64169a89990a8a4d4c2e4_reversed.mp4"
+    },
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides/files/Presentation/5e5fbc9e1d94a7db04b47cbfeffb061ea840ec09363239af613e1882f3a3edd3.mp4",
+      "rev_file": "slides/files/Presentation/5e5fbc9e1d94a7db04b47cbfeffb061ea840ec09363239af613e1882f3a3edd3_reversed.mp4"
+    },
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "skip_animations": false,
+      "src": null,
+      "type": "video",
+      "direction": "horizontal",
+      "file": "slides/files/Presentation/3d2c372b8362bc84ebcc573e6c8559ed6c1bf77fe8cd4de819f60d08fcd781ee.mp4",
+      "rev_file": "slides/files/Presentation/3d2c372b8362bc84ebcc573e6c8559ed6c1bf77fe8cd4de819f60d08fcd781ee_reversed.mp4"
     }
   ],
   "resolution": [
