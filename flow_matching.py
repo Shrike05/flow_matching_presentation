@@ -33,10 +33,22 @@ class Presentation(Slide):
         ).set_color(GREEN)
         set_shape_A.shift(LEFT * 5)
 
+        set_shape_C = ParametricFunction(
+            lambda t: np.array([
+                (1.5 + 0.3*np.sin(10*t)) * np.cos(t),
+                (1.5 + 0.3*np.sin(10*t)) * np.sin(t),
+                0
+            ]), 
+            t_range=[0, TAU],
+            fill_opacity=0.2
+        ).set_color(GREEN)
+        set_shape_C.shift(LEFT * 5)
+        set_shape_C.shift(DOWN)
+
         set_shape_B = ParametricFunction(
             lambda t: np.array([
-                (2 + 0.3*np.sin(3*t)) * np.cos(t),
-                (2 + 0.6*np.sin(2*t)) * np.sin(t),
+                (2 + 0.45*np.sin(14*t)) * np.cos(t),
+                (2 + 0.5*np.sin(5*t)) * np.sin(t),
                 0
             ]), 
             t_range=[0, TAU],
@@ -53,20 +65,47 @@ class Presentation(Slide):
         ).set_color(RED)
 
         set_shape_B.shift(RIGHT * 5)
-        cats_subset.move_to(set_shape_B.get_center() + LEFT*0.4)
-
         sets_group = VGroup(set_shape_A, set_shape_B)
         sets_group.shift(DOWN)
         sets_group.scale(0.7)
 
-        dots = [ Dot().move_to(cats_subset.get_center() + UP*np.sin(1231*i) * 0.8 + RIGHT*np.sin(34123* i) * 0.7) for (i, kitten) in enumerate(cats)]
+        cats_subset.move_to(set_shape_B.get_center())
+        dots = [ Dot().move_to(cats_subset.get_center() + UP*np.sin(1231*i) * 0.5 + RIGHT*np.sin(34123* i) * 0.37) for (i, kitten) in enumerate(cats)]
         word_dot = Dot().move_to(set_shape_A.get_center())
+        random_dots = [ Dot().move_to(set_shape_C.get_center() + UP*np.sin(43152*i) * 0.8 + RIGHT*np.sin(95431* i) * 0.8) for (i, kitten) in enumerate(cats)]
 
-        func_arrow = CurvedArrow(
-            start_point=word_dot.get_center(),
-            end_point=dots[0].get_center(),
+        func = Text(r"F")
+        idx = ValueTracker(0.)
+
+        inp_arrow = always_redraw(lambda: CurvedArrow(
+            start_point= word_dot.get_right(),
+            end_point=func.get_left(),
             angle=-TAU/8
-        )
+        ))
+
+        out_arrow = always_redraw(lambda: CurvedArrow(
+            start_point=func.get_right(),
+            end_point= (
+                    (1 - (idx.get_value()-int(idx.get_value()))) * 
+                    dots[int(idx.get_value())].get_left() + 
+                    (idx.get_value()-int(idx.get_value())) * 
+                    dots[int(idx.get_value()+1)%len(dots)].get_left()
+                ),
+            angle=TAU/8
+        ))
+
+        random_inp_arrow = always_redraw(lambda: CurvedArrow(
+            start_point=(
+                    (1 - (idx.get_value()-int(idx.get_value()))) * 
+                    random_dots[int(idx.get_value())].get_right() + 
+                    (idx.get_value()-int(idx.get_value())) * 
+                    random_dots[int(idx.get_value()+1)%len(dots)].get_right()
+                ),
+            end_point=func.get_left(),
+            angle=-TAU/8
+        ))
+
+        set_A_with_dot = VGroup(word_dot, set_shape_A)
 
         #Show title and move it up
         self.play(Write(title))
@@ -118,9 +157,18 @@ class Presentation(Slide):
         #move the cats into points on this set view 
         self.play(FadeOut(multi_arrow_group), *[FadeTransform( cat, dot ) for (cat, dot) in zip(cats, dots)], ReplacementTransform(cat_word2, word_dot))
         self.next_slide()
-        self.play(FadeIn(func_arrow))
-
-
+        self.play(FadeIn(func, inp_arrow, out_arrow))
+        self.next_slide()
+        self.play(set_A_with_dot.animate.shift(UP*3).scale(0.5))
+        self.play(FadeIn(set_shape_C))
+        self.next_slide()
+        self.play(*[FadeIn(dot) for dot in random_dots], FadeIn(random_inp_arrow))
+        self.next_slide(loop=True)
+        for i in range(1, len(random_dots)):
+            self.play(idx.animate.set_value(i))
+            self.wait(0.2)
+        self.play(idx.animate.set_value(0))
+        self.next_slide()
 
 
     def create_titles(self):
