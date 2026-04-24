@@ -47,7 +47,7 @@ class Presentation(Slide):
 
         set_shape_B = ParametricFunction(
             lambda t: np.array([
-                (2 + 0.45*np.sin(14*t)) * np.cos(t),
+                (2 + 0.45*np.sin(7*t)) * np.cos(t),
                 (2 + 0.5*np.sin(5*t)) * np.sin(t),
                 0
             ]), 
@@ -56,8 +56,8 @@ class Presentation(Slide):
         ).set_color(BLUE)
         cats_subset = ParametricFunction(
             lambda t: np.array([
-                (1 + 0.3*np.sin(4*t)) * np.cos(t),
-                (1 + 0.2*np.sin(7*t)) * np.sin(t),
+                (1 + 0.2*np.sin(1*t)) * np.cos(t),
+                (1 + 0.2*np.sin(1*t)) * np.sin(t),
                 0
             ]), 
             t_range=[0, TAU],
@@ -69,8 +69,9 @@ class Presentation(Slide):
         sets_group.shift(DOWN)
         sets_group.scale(0.7)
 
+        cats_subset.scale(0.7)
         cats_subset.move_to(set_shape_B.get_center())
-        dots = [ Dot().move_to(cats_subset.get_center() + UP*np.sin(1231*i) * 0.5 + RIGHT*np.sin(34123* i) * 0.37) for (i, kitten) in enumerate(cats)]
+        dots = [ Dot().move_to(cats_subset.get_center() + UP*np.sin(121*i) * 0.5 + RIGHT*np.sin(3413* i) * 0.5) for (i, kitten) in enumerate(cats)]
         word_dot = Dot().move_to(set_shape_A.get_center())
         random_dots = [ Dot().move_to(set_shape_C.get_center() + UP*np.sin(43152*i) * 0.8 + RIGHT*np.sin(95431* i) * 0.8) for (i, kitten) in enumerate(cats)]
 
@@ -157,18 +158,37 @@ class Presentation(Slide):
         #move the cats into points on this set view 
         self.play(FadeOut(multi_arrow_group), *[FadeTransform( cat, dot ) for (cat, dot) in zip(cats, dots)], ReplacementTransform(cat_word2, word_dot))
         self.next_slide()
+
+        #Create the io arrows
         self.play(FadeIn(func, inp_arrow, out_arrow))
         self.next_slide()
+
+        #Move words set up and make it smaller, then add the C distribution
         self.play(set_A_with_dot.animate.shift(UP*3).scale(0.5))
         self.play(FadeIn(set_shape_C))
         self.next_slide()
+
+        #Create the dots in C
         self.play(*[FadeIn(dot) for dot in random_dots], FadeIn(random_inp_arrow))
+        
+        #Cycle through the points and show how the function maps them
         self.next_slide(loop=True)
         for i in range(1, len(random_dots)):
             self.play(idx.animate.set_value(i))
             self.wait(0.2)
         self.play(idx.animate.set_value(0))
+
+        #Show the distribution of the cats
         self.next_slide()
+        self.play(FadeIn(cats_subset))
+
+        #Show the gaussian distribution transform into the cats distribution
+        self.next_slide()
+        self.play(
+            ReplacementTransform(set_shape_C, cats_subset), 
+            *[ReplacementTransform(r_dot, o_dot) for (r_dot, o_dot) in zip(random_dots, dots)],
+            FadeOut(random_inp_arrow)
+        )  
 
 
     def create_titles(self):
