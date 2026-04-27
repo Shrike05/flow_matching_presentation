@@ -6,7 +6,7 @@ class Presentation(Slide):
         self.slide_1()
 
     def slide_1(self):
-        title, title_step2 = self.create_titles()
+        title, title_step2, title_step3 = self.create_titles()
 
         cat_word, cat_word2, cat_img, cats = self.create_cat()
 
@@ -47,8 +47,8 @@ class Presentation(Slide):
 
         set_shape_B = ParametricFunction(
             lambda t: np.array([
-                (2 + 0.45*np.sin(7*t)) * np.cos(t),
-                (2 + 0.5*np.sin(5*t)) * np.sin(t),
+                (2 + 0.45*np.sin(4*t)) * np.cos(t),
+                (2 + 0.5*np.sin(2*t)) * np.sin(t),
                 0
             ]), 
             t_range=[0, TAU],
@@ -108,6 +108,16 @@ class Presentation(Slide):
 
         set_A_with_dot = VGroup(word_dot, set_shape_A)
 
+        plane = NumberPlane(
+            x_range=[-7.11, 7.11, 1], # Covers the full width
+            y_range=[-4, 4, 1],       # Covers the full height
+            background_line_style={
+                "stroke_color": BLUE_D,
+                "stroke_width": 2,
+                "stroke_opacity": 0.5
+            }
+        )
+
         #Show title and move it up
         self.play(Write(title))
         self.next_slide()
@@ -123,7 +133,7 @@ class Presentation(Slide):
         self.next_slide()
         self.play(FadeIn(img_vec_brace), FadeIn(m_text), FadeIn(word_vec_brace), FadeIn(n_text))
         self.next_slide()
-        self.play(Transform(title, title_step2))
+        self.play(ReplacementTransform(title, title_step2))
 
         #Arrow
         self.play(FadeIn(arrow))
@@ -177,25 +187,55 @@ class Presentation(Slide):
             self.play(idx.animate.set_value(i))
             self.wait(0.2)
         self.play(idx.animate.set_value(0))
+        self.next_slide()
 
         #Show the distribution of the cats
-        self.next_slide()
         self.play(FadeIn(cats_subset))
-
-        #Show the gaussian distribution transform into the cats distribution
         self.next_slide()
-        self.play(
-            ReplacementTransform(set_shape_C, cats_subset), 
-            *[ReplacementTransform(r_dot, o_dot) for (r_dot, o_dot) in zip(random_dots, dots)],
-            FadeOut(random_inp_arrow)
-        )  
 
+        #Transform title
+        self.play(ReplacementTransform(title_step2, title_step3))
+        self.next_slide()
+
+        #Remove everything except the two distributions
+        self.play(FadeOut(set_A_with_dot), FadeOut(inp_arrow), FadeOut(out_arrow), FadeOut(random_inp_arrow), FadeOut(func))
+        self.next_slide()
+
+        #keep only points add coordinate system
+        self.play(FadeOut(set_shape_C), FadeOut(set_shape_B), FadeOut(cats_subset), FadeOut(title_step3))
+        self.play(FadeIn(plane), *[dot.animate.shift(UP*2) for dot in dots])
+        self.next_slide()
+
+        #add lines connecting dots
+        lines = [Line(start= r_dot.get_center(), end=o_dot.get_center(), color=GREEN, stroke_width=2 ) for (r_dot, o_dot) in zip(random_dots, dots)]
+        self.play(*[FadeIn(line) for line in lines])
+        self.next_slide()
+
+        #create velocity field, good luck
+        field = ArrowVectorField(lambda p: np.mean([  (dot.get_center() - p) for dot in dots], axis=0))
+        self.play(*[FadeOut(line) for line in lines])
+        self.play(FadeIn(field))
+        self.next_slide()
+
+        #Outro Slide
+        self.play(FadeOut(field), FadeOut(plane), *[FadeOut(dot) for dot in random_dots], *[FadeOut(dot) for dot in dots])
+        self.play(FadeIn(Text("Flow matching", font_size=54)))
+
+    def gravity(p, x):
+        vec = x - p
+        weight = np.mean(vec)
+        if weight == 0:
+            return np.array([0,0,0])
+        return vec/(weight**2)
 
     def create_titles(self):
         title = Text("Generating Images from Words", font_size=54)
         title_step2 = Text("Transforming Vectors to other Vectors", font_size=54)
+        title_step3 = Text("Transforming Distribution A to Distribution B", font_size=34)
+
         title_step2.to_edge(UP)
-        return title, title_step2
+        title_step3.to_edge(UP)
+        return title, title_step2, title_step3
 
     def create_cat(self): 
         cat_word = Text("cat", font_size=64)
@@ -246,8 +286,6 @@ class Presentation(Slide):
 
 
         return word_vec, img_vec, word_vec_brace, n_text, img_vec_brace, m_text, arrow
-
-
 
 
 
