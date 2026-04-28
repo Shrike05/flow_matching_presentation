@@ -219,7 +219,18 @@ class Presentation(Slide):
 
         #Outro Slide
         self.play(FadeOut(field), FadeOut(plane), *[FadeOut(dot) for dot in random_dots], *[FadeOut(dot) for dot in dots])
+        stream_lines = StreamLines(
+            lambda p: np.mean([  (dot.get_center() - p) for dot in dots], axis=0),
+            color=GRAY_E,
+            stroke_width=2,
+            max_anchors_per_line=30,
+        )
+
+        self.add(stream_lines)
+        stream_lines.start_animation(warm_up=True, flow_speed=1.0)
+
         self.play(FadeIn(Text("Flow matching", font_size=54)))
+        self.wait(60)
 
     def gravity(p, x):
         vec = x - p
